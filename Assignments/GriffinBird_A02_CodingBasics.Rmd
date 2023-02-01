@@ -1,6 +1,6 @@
 ---
 title: "Assignment 2: Coding Basics"
-author: "Student Name"
+author: "Griffin Bird"
 output: pdf_document
 geometry: margin=2.54cm
 editor_options: 
@@ -24,18 +24,33 @@ This exercise accompanies the lessons in Environmental Data Analytics on coding 
 
 1.  Generate a sequence of numbers from one to 100, increasing by fours. Assign this sequence a name.
 
+```{r 1 to 100 increasing by 4}
+seq_by4 <- seq(0, 100, by = 4)
+
+head(seq_by4)
+```
+
 2.  Compute the mean and median of this sequence.
 
+```{r}
+seq_mean <- mean(seq_by4)
+seq_median <- median(seq_by4)
+```
+
 3.  Ask R to determine whether the mean is greater than the median.
+
+```{r}
+seq_mean > seq_median
+```
 
 4.  Insert comments in your code to describe what you are doing.
 
 ```{r}
-#1. 
+#1. I used the sequence function to generate numbers from 1 to 100, and used "by" to indicate that the sequence should increase by increments of 4
 
-#2. 
+#2. I calculated the mean and median of the data set using Rs built in functions, then assigned those values to variables
 
-#3. 
+#3. I used a boolean expression to get R to tell me whether the mean was greater than the median, R will return true or false, and it turns out the mean is not greater than the median.
 
 ```
 
