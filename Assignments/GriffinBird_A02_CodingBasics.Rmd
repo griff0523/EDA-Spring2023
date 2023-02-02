@@ -46,11 +46,14 @@ seq_mean > seq_median
 4.  Insert comments in your code to describe what you are doing.
 
 ```{r}
-#1. I used the sequence function to generate numbers from 1 to 100, and used "by" to indicate that the sequence should increase by increments of 4
+#1. I used the sequence function to generate numbers from 1 to 100, and used 
+#"by" to indicate that the sequence should increase by increments of 4
 
-#2. I calculated the mean and median of the data set using Rs built in functions, then assigned those values to variables
+#2. I calculated the mean and median of the data set using Rs 
+#built in functions, then assigned those values to variables
 
-#3. I used a boolean expression to get R to tell me whether the mean was greater than the median, R will return true or false, and it turns out the mean is not greater than the median.
+#3. I used a boolean expression to get R to tell me whether the mean was greater than 
+# the median, R will return true or false, and it turns out the mean is not greater than the median.
 
 ```
 
@@ -65,11 +68,13 @@ seq_mean > seq_median
 students <- c('John', 'Jane', 'Jill', 'Joseph', 'Jacqueline', 'Josephine')
 #Character vectors
 
-scores <- runif(6, min=0, max=100)
+scores <- c(4, 49, 89, 99, 35, 80)
 #Numeric vectors
 
 pass <- (scores>50)
 #Logical vectors
+
+print(scores)
 
 ```
 
@@ -114,4 +119,4 @@ did.they.pass(scores)
 
 12. QUESTION: Which option of `if` and `else` vs. `ifelse` worked? Why?
 
-> Answer:
+> Answer: 'ifelse' worked because it is a vectorized version of 'if', 'if' works with things that have a length of 1 but 'ifelse' can work on an entire vector
