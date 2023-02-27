@@ -36,6 +36,8 @@ library(tidyverse)
 library(lubridate)
 library(here)
 library(cowplot)
+library(ggplot2)
+library(ggthemes)
 
 getwd()
 
@@ -57,6 +59,17 @@ PeterPaul.data$sampledate <- as_date(PeterPaul.data$sampledate)
 ```{r build plot theme}
 #3
 
+mytheme <- theme_wsj() + theme(plot.title = element_text(hjust = 0.5), 
+   panel.grid.minor = element_line(color = 2,
+   size = 0.25,
+   linetype = 1),
+  legend.position = "bottom", 
+  axis.text = element_text(face="plain", size = 12),
+  axis.title=element_text(size=14),
+  title = element_text(size=14))
+
+theme_set(mytheme)
+
 ```
 
 ## Create graphs
@@ -66,6 +79,16 @@ For numbers 4-7, create ggplot graphs and adjust aesthetics to follow best pract
 
 ```{r plot total P vs PO4}
 #4 
+
+phos.plot <- ggplot(PeterPaul.data, aes(x = po4, y = tp_ug, color = lakename)) + 
+  xlim(0, 50) +
+  labs(title = "Phosphorus by Phosphate for Peter Lake and Paul Lake",
+       x = "Phosphate (PO4)",
+       y = "Phosphorus") +
+  geom_smooth(method = lm, color = "black") +
+  geom_point()
+
+print(phos.plot)
 
 ```
 
@@ -77,6 +100,25 @@ Tip: R has a build in variable called `month.abb` that returns a list of months;
 ```{r Create boxplots}
 #5 
 
+temp.plot <- ggplot(PeterPaul.data, aes(x = month.abb[month], y = temperature_C, color = lakename)) + 
+  labs(title = "Phosphorus by Phosphate for Peter Lake and Paul Lake",
+       x = "Phosphate (PO4)",
+       y = "Phosphorus") +
+  geom_boxplot()
+
+TP.plot <- ggplot(PeterPaul.data, aes(x = sampledate, y = temperature_C, color = lakename)) + 
+  labs(title = "Phosphorus by Phosphate for Peter Lake and Paul Lake",
+       x = "Phosphate (PO4)",
+       y = "Phosphorus") +
+  geom_boxplot()
+
+TN.plot <- ggplot(PeterPaul.data, aes(x = sampledate, y = temperature_C, color = lakename)) + 
+  labs(title = "Phosphorus by Phosphate for Peter Lake and Paul Lake",
+       x = "Phosphate (PO4)",
+       y = "Phosphorus") +
+  geom_boxplot()
+
+print(temp.plot)
 ```
 
 Question: What do you observe about the variables of interest over seasons and between lakes? 
