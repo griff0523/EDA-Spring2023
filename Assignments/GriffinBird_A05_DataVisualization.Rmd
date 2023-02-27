@@ -1,12 +1,15 @@
 ---
-title: "Assignment 5: Data Visualization"
+title: 'Assignment 5: Data Visualization'
 author: "Griffin Bird"
 date: "Spring 2023"
-output: pdf_document
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
 geometry: margin=2.54cm
 fig_height: 3
 fig_width: 4
-editor_options: 
+editor_options:
   chunk_output_type: console
 ---
 
@@ -42,6 +45,7 @@ library(ggthemes)
 
 knitr::opts_chunk$set(tidy.opts=list(width.cutoff=80), tidy=TRUE)
 
+setwd("C:/Users/17038/Documents/EDA-Spring2023")
 getwd()
 
 PeterPaul.data <- read.csv("./Data/Processed/NTL-LTER_Lake_Chemistry_Nutrients_PeterPaul_Processed.csv", stringsAsFactors = TRUE)
