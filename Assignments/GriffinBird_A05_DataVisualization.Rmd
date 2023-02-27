@@ -32,12 +32,15 @@ This exercise accompanies the lessons in Environmental Data Analytics on Data Vi
 
 ```{r initialize project}
 #1 
+library(knitr)
 library(tidyverse)
 library(lubridate)
 library(here)
 library(cowplot)
 library(ggplot2)
 library(ggthemes)
+
+knitr::opts_chunk$set(tidy.opts=list(width.cutoff=80), tidy=TRUE)
 
 getwd()
 
@@ -84,7 +87,7 @@ phos.plot <- ggplot(PeterPaul.data, aes(x = po4, y = tp_ug, color = lakename)) +
   xlim(0, 50) +
   labs(title = "Phosphorus by Phosphate for Peter Lake and Paul Lake",
        x = "Phosphate (PO4)",
-       y = "Phosphorus") +
+       y = "Phosphorus (µg/l)") +
   geom_smooth(method = lm, color = "black") +
   geom_point()
 
@@ -100,30 +103,39 @@ Tip: R has a build in variable called `month.abb` that returns a list of months;
 ```{r Create boxplots}
 #5 
 
-temp.plot <- ggplot(PeterPaul.data, aes(x = month.abb[month], y = temperature_C, color = lakename)) + 
-  labs(title = "Phosphorus by Phosphate for Peter Lake and Paul Lake",
-       x = "Phosphate (PO4)",
-       y = "Phosphorus") +
-  geom_boxplot()
-
-TP.plot <- ggplot(PeterPaul.data, aes(x = sampledate, y = temperature_C, color = lakename)) + 
-  labs(title = "Phosphorus by Phosphate for Peter Lake and Paul Lake",
-       x = "Phosphate (PO4)",
-       y = "Phosphorus") +
-  geom_boxplot()
-
-TN.plot <- ggplot(PeterPaul.data, aes(x = sampledate, y = temperature_C, color = lakename)) + 
-  labs(title = "Phosphorus by Phosphate for Peter Lake and Paul Lake",
-       x = "Phosphate (PO4)",
-       y = "Phosphorus") +
+temp.plot <- ggplot(PeterPaul.data, aes(x = month.abb[month], y = temperature_C, color = lakename)) +
+  labs(x = "",
+       y = "Temperature (C)") + 
+  theme(legend.position = "none") +
+  scale_x_discrete(limits = month.abb[5:11]) + 
   geom_boxplot()
 
 print(temp.plot)
+
+TP.plot <- ggplot(PeterPaul.data, aes(x = sort(month.abb[month]), y = tp_ug, color = lakename)) + 
+  labs(x = "",
+       y = "Total Phosphorus (µg/l)") + 
+  theme(legend.position = "none") +
+  scale_x_discrete(limits = month.abb[5:11]) +
+  geom_boxplot()
+
+TN.plot <- ggplot(PeterPaul.data, aes(x = month.abb[month], y = tn_ug, color = lakename)) + 
+  labs(x = "Month",
+       y = "Total Nitrogen (µg/l)") +
+  scale_x_discrete(limits = month.abb[5:11]) +
+  geom_boxplot()
+
+```
+
+```{r combined boxplots, fig.height =15, fig.width = 6}
+
+plot_grid(temp.plot, TP.plot, TN.plot, ncol=1, align = "vh")
+
 ```
 
 Question: What do you observe about the variables of interest over seasons and between lakes? 
 
-> Answer: 
+> Answer: All of the variables trend upwards over the warmer summer months. There isn't much temperature difference between the lakes. But it does look like Peter lake might recieve more phosporus and nitrogen pollution than paul lake.
 
 6. [Niwot Ridge] Plot a subset of the litter dataset by displaying only the "Needles" functional group. Plot the dry mass of needle litter by date and separate by NLCD class with a color aesthetic. (no need to adjust the name of each land use)
 
@@ -131,12 +143,29 @@ Question: What do you observe about the variables of interest over seasons and b
 
 ```{r Plot litter}
 #6
+NIWOT.litter.data %>%
+  filter(functionalGroup == "Needles") %>%
+  ggplot(aes(x = collectDate, y = dryMass, color = nlcdClass)) + 
+  ylim(0,45) +
+  labs(title = "Dry Mass of Collected Needle Litter Over Time",
+       x = "Collection Date",
+       y = "Dry Mass") +
+  geom_point() 
 
-
+  
 #7
 
+NIWOT.litter.data %>%
+  filter(functionalGroup == "Needles") %>%
+  ggplot(aes(x = collectDate, y = dryMass)) + 
+  ylim(0,45) +
+  labs(title = "Dry Mass of Collected Needle Litter Over Time",
+       x = "Collection Date",
+       y = "Dry Mass") +
+  facet_wrap(vars(nlcdClass), nrow = 3) +
+  geom_point() 
 
 ```
 Question: Which of these plots (6 vs. 7) do you think is more effective, and why? 
 
-> Answer:
+> Answer: The faceted plot is more effective. The dry mass data is so clustered together that its hard to see detail when nlcd classes are differentiated by color. But the faceted graph gives the data room to spread out and is easier to interpret. 
