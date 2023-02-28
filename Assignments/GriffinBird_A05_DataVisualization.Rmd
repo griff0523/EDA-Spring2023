@@ -35,6 +35,9 @@ This exercise accompanies the lessons in Environmental Data Analytics on Data Vi
 
 ```{r initialize project}
 #1 
+setwd("C:/Users/griff/OneDrive/Documents/EDA-Spring2023")
+getwd()
+
 library(knitr)
 library(tidyverse)
 library(lubridate)
@@ -44,9 +47,6 @@ library(ggplot2)
 library(ggthemes)
 
 knitr::opts_chunk$set(tidy.opts=list(width.cutoff=80), tidy=TRUE)
-
-setwd("C:/Users/17038/Documents/EDA-Spring2023")
-getwd()
 
 PeterPaul.data <- read.csv("./Data/Processed/NTL-LTER_Lake_Chemistry_Nutrients_PeterPaul_Processed.csv", stringsAsFactors = TRUE)
 NIWOT.litter.data <- read.csv("./Data/Processed/NEON_NIWO_Litter_mass_trap_Processed.csv", stringsAsFactors = TRUE)
@@ -89,7 +89,7 @@ For numbers 4-7, create ggplot graphs and adjust aesthetics to follow best pract
 
 phos.plot <- ggplot(PeterPaul.data, aes(x = po4, y = tp_ug, color = lakename)) + 
   xlim(0, 50) +
-  labs(title = "Phosphorus by Phosphate for Peter Lake and Paul Lake",
+  labs(title = "Phosphorus Conc. by Phosphate Conc.",
        x = "Phosphate (PO4)",
        y = "Phosphorus (µg/l)") +
   geom_smooth(method = lm, color = "black") +
@@ -114,8 +114,6 @@ temp.plot <- ggplot(PeterPaul.data, aes(x = month.abb[month], y = temperature_C,
   scale_x_discrete(limits = month.abb[5:11]) + 
   geom_boxplot()
 
-print(temp.plot)
-
 TP.plot <- ggplot(PeterPaul.data, aes(x = sort(month.abb[month]), y = tp_ug, color = lakename)) + 
   labs(x = "",
        y = "Total Phosphorus (µg/l)") + 
@@ -131,7 +129,7 @@ TN.plot <- ggplot(PeterPaul.data, aes(x = month.abb[month], y = tn_ug, color = l
 
 ```
 
-```{r combined boxplots, fig.height =15, fig.width = 6}
+```{r combined boxplots, fig.height =15, fig.width = 12}
 
 plot_grid(temp.plot, TP.plot, TN.plot, ncol=1, align = "vh")
 
@@ -151,7 +149,7 @@ NIWOT.litter.data %>%
   filter(functionalGroup == "Needles") %>%
   ggplot(aes(x = collectDate, y = dryMass, color = nlcdClass)) + 
   ylim(0,45) +
-  labs(title = "Dry Mass of Collected Needle Litter Over Time",
+  labs(title = "Dry Mass of Needle Litter Over Time",
        x = "Collection Date",
        y = "Dry Mass") +
   geom_point() 
@@ -163,7 +161,7 @@ NIWOT.litter.data %>%
   filter(functionalGroup == "Needles") %>%
   ggplot(aes(x = collectDate, y = dryMass)) + 
   ylim(0,45) +
-  labs(title = "Dry Mass of Collected Needle Litter Over Time",
+  labs(title = "Dry Mass of Needle Litter Over Time",
        x = "Collection Date",
        y = "Dry Mass") +
   facet_wrap(vars(nlcdClass), nrow = 3) +

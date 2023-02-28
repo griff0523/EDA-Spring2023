@@ -22,11 +22,15 @@ editor_options:
 library(tidyverse);library(lubridate);library(here)
 
 #Library for creating ridge plots
+
 library(ggridges)
 
 #Enhanced color ramps
+
 library(viridis)
+
 library(RColorBrewer)
+
 library(colormap)
 
 #Add pre-set themes <--NEW
@@ -40,6 +44,7 @@ The expression function can be used when you want to add mathematical symbols an
 ```{r formatted text}
 
 #Create a plot
+
 Plot_text <-
 ggplot(data=data.frame(x=0,y=0))+
   geom_point(aes(x=x,y=y)) +
@@ -54,7 +59,7 @@ print(Plot_text)
 
 #Save the plot
 ggsave(
-  filename = "./Output/Plot_text.jpg",
+  filename = "C:/Users/griff/OneDrive/Documents/EDA-Spring2023/Output/Plot_text.jpg",
   plot = Plot_text, 
   height = 4, 
   width = 6, 
@@ -101,7 +106,7 @@ Say we want to plot the number of records each month in the Peter/Paul lakes dat
 #Convert month to a factor -- with 12 levels, labelled with month names
 
 #Try again: Plot how many Lake observations occur each month
-
+scale_x_discrete(drop=FALSE)
 #Alter to include missing months
 
 #Tidy up the code
@@ -228,6 +233,7 @@ Exercise: build your own scatterplots of PeterPaul.chem.nutrients
 # Plot surface temperatures by day of  year. 
 # Color your points by year, and facet by lake in two rows.
 # Change the ylab name
+
 
 
 #2. 
