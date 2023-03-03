@@ -1,6 +1,6 @@
 ---
 title: "Assignment 6: GLMs (Linear Regressios, ANOVA, & t-tests)"
-author: "Student Name"
+author: "Griffin Bird"
 date: "Spring 2023"
 output: pdf_document
 geometry: margin=2.54cm
@@ -27,10 +27,34 @@ This exercise accompanies the lessons in Environmental Data Analytics on general
 
 ```{r setup2}
 #1
+library(tidyverse)
+library(agricolae)
+library(here)
+library(ggplot2)
+library(ggthemes)
+library(dplyr)
+library(lubridate)
+library(knitr)
 
+knitr::opts_chunk$set(tidy.opts=list(width.cutoff=80), tidy=TRUE)
+
+here()
+getwd()
+
+Lake <- read.csv("./Data/Raw/NTL-LTER_Lake_ChemistryPhysics_Raw.csv", stringsAsFactors = FALSE)
+Lake$sampledate <- as.Date(Lake$sampledate, "m%d%Y")
 
 #2
+mytheme <- theme_wsj() + theme(plot.title = element_text(hjust = 0.5), 
+   panel.grid.minor = element_line(color = 2,
+   size = 0.25,
+   linetype = 1),
+  legend.position = "bottom", 
+  axis.text = element_text(face="plain", size = 12),
+  axis.title=element_text(size=14),
+  title = element_text(size=14))
 
+theme_set(mytheme)
 
 ```
 
@@ -39,9 +63,10 @@ Our first research question is: Does mean lake temperature recorded during July 
 
 3. State the null and alternative hypotheses for this question:
 > Answer:
-H0: 
-Ha: 
 
+H0: Mean July lake temperature does not change with depth across all lakes.
+
+Ha: Mean July lake temperature changes with depth across all lake
 
 4.  Wrangle your NTL-LTER dataset with a pipe function so that the records meet the following criteria: 
  * Only dates in July. 
