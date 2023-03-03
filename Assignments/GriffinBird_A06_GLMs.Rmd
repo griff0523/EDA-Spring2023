@@ -35,14 +35,15 @@ library(ggthemes)
 library(dplyr)
 library(lubridate)
 library(knitr)
+library(dplyr)
 
 knitr::opts_chunk$set(tidy.opts=list(width.cutoff=80), tidy=TRUE)
 
 here()
 getwd()
 
-Lake <- read.csv("./Data/Raw/NTL-LTER_Lake_ChemistryPhysics_Raw.csv", stringsAsFactors = FALSE)
-Lake$sampledate <- as.Date(Lake$sampledate, "m%d%Y")
+Lake <- read.csv("./Data/Raw/NTL-LTER_Lake_ChemistryPhysics_Raw.csv", stringsAsFactors = TRUE)
+Lake$sampledate <- as.Date(Lake$sampledate, "%m/%d/%y")
 
 #2
 mytheme <- theme_wsj() + theme(plot.title = element_text(hjust = 0.5), 
@@ -77,7 +78,10 @@ Ha: Mean July lake temperature changes with depth across all lake
 
 ```{r scatterplot}
 #4
-
+July.Temps <- Lake %>%
+  filter(month(Lake$sampledate) == 07) %>%
+  select(`lakename`, `year4`, `daynum`, `depth`, `temperature_C`) %>%
+  drop_na()
 
 #5
 
