@@ -1,6 +1,6 @@
 ---
 title: 'A07 - Crafting Reports'
-author: "Student_name" 
+author: "Griffin Bird" 
 date: "Spring 2023"
 output: pdf_document
 ---
@@ -25,13 +25,45 @@ output: pdf_document
 
 Create a table below summarizing the metadata of the EPA Air Quality data. The first column will be the metadata attribute item name: "Source", "Date", and "Filename". And the second column will include the metadata values: "EPA Air Quality SYstem (AQS)", "2018-2019", and "EPAair_O3_PM25_NC1819_Processed.csv". The first column should be aligned to the right and the second to the left.
 
+```{r initial}
+library(tidyverse)
+library(agricolae)
+library(here)
+library(ggplot2)
+library(ggthemes)
+library(dplyr)
+library(lubridate)
+library(knitr)
+library(dplyr)
+library(gt)
+library(kableExtra)
+
+knitr::opts_chunk$set(tidy.opts=list(width.cutoff=80), tidy=TRUE)
+
+here()
+
+AirQuality <- read.csv("C:/Users/17038/Documents/EDASpring2023/Data/Processed/EPAair_O3_PM25_NC1819_Processed.csv")
+
+Metadata <- data.frame("Metadata Attributes"=rep(c('Source', 'Date', 'Filename')), "Values"=rep(c('EPA Air Quality SYstem (AQS)', '2018-2019', 'EPAair_O3_PM25_NC1819_Processed.csv')))
+
+Metadata %>%
+  gt() %>%
+  cols_align(
+    align = "right",
+    columns = Metadata.Attributes) %>%
+  cols_align(
+    align = "left",
+    columns = Values)
+
+```
+
 ---
 
 ## Task 2 - Import packages and data, suppressing messages
 
 Set the following R code chunk so that it runs when knit, but no messages, errors, or any output is shown. The code itself should be displayed.
 
-```{r project.setup}
+```{r project.setup, message=FALSE, warning=FALSE, results="hide"}
 #Import libraries
 library(tidyverse);library(lubridate);library(here);library(knitr)
 
@@ -56,7 +88,7 @@ Customize the chunk options such that the code is run but is not displayed in th
 >
 > -   If your output table spans across two pages, try inserting a new line (via `\newpage`) in the markdown just before your code chunk.
 
-```{r data.summary, echo=F}
+```{r data.summary, echo=FALSE}
 #Compute mean PM2.5 concentration for each county, sorted by value
 summary_PM25 <- epa_data %>% 
   drop_na(PM2.5) %>% 
@@ -73,8 +105,12 @@ summary_Ozone <- epa_data %>%
   arrange(mean_Ozone)
 
 #Use the `kable` function to produce the 2 tables
+kable(summary_PM25,caption = "Mean Particulates (2.5mm)", col.names = c("County", "$\\mu g/m^3$")) %>%
+  kable_material()
 
 
+kable(summary_Ozone,caption = "Mean Ozone", col.names = c("County", "$\\mu g/m^3$")) %>%
+  kable_material()
 ```
 
 \newpage
@@ -82,7 +118,32 @@ summary_Ozone <- epa_data %>%
 ## Task 3: Plots
 
 Create two separate code chunks that create boxplots of the distribution of Ozone levels by month using, one for only records collected in 2018 and one for records in 2019. Customize the chunk options such that the final figures are displayed but not the code used to generate the figures. In addition, the plots aligned on the left side of the page and set the figure heights so both plots fit on the same page with minimal space remaining. Lastly, add a `fig.cap` chunk option to add a caption (title) to your plot that will display underneath the figure.
+```{r Ozone2018, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Ozone Levels by Month 2018", fig.align='left', fig.height= 2.5}
 
+filter(AirQuality, Year == 2018) %>%
+  ggplot(aes(x=Month,y=Ozone)) +
+  geom_point(alpha=0.3) +
+  geom_smooth(se=F) +
+  labs(
+    title ='Ozone By Month in 2018',
+    x = 'Month',
+    y = 'Ozone (g/m^3)')
+
+
+```
+```{r Ozone2019, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Ozone Levels by Month 2019", fig.align='right', fig.height= 2.5}
+
+filter(AirQuality, Year == 2019) %>%
+  ggplot(aes(x=Month,y=Ozone)) +
+  geom_point(alpha=0.3) +
+  geom_smooth(se=F) +
+  labs(
+    title ='Ozone By Month in 2019',
+    x = 'Month',
+    y = 'Ozone (g/m^3)')
+
+
+```
 
 
 \newpage
