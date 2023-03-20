@@ -3,6 +3,7 @@ title: 'A07 - Crafting Reports'
 author: "Griffin Bird" 
 date: "Spring 2023"
 output: pdf_document
+
 ---
 
 ## Objectives:
@@ -121,7 +122,7 @@ Create two separate code chunks that create boxplots of the distribution of Ozon
 ```{r Ozone2018, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Ozone Levels by Month 2018", fig.align='left', fig.height= 2.5}
 
 filter(AirQuality, Year == 2018) %>%
-  ggplot(aes(x=Month,y=Ozone)) +
+  ggplot(aes(x=month.abb[Month],y=Ozone)) +
   geom_point(alpha=0.3) +
   geom_smooth(se=F) +
   labs(
@@ -130,11 +131,11 @@ filter(AirQuality, Year == 2018) %>%
     y = 'Ozone (g/m^3)')
 
 
-```
+  ```
 ```{r Ozone2019, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Ozone Levels by Month 2019", fig.align='right', fig.height= 2.5}
 
 filter(AirQuality, Year == 2019) %>%
-  ggplot(aes(x=Month,y=Ozone)) +
+  ggplot(aes(x=month.abb[Month],y=Ozone)) +
   geom_point(alpha=0.3) +
   geom_smooth(se=F) +
   labs(
@@ -153,5 +154,5 @@ Add a table of contents to your document and knit to a PDF. Submit your PDF to S
 
 ### Git Repository
 
-
+https://github.com/griff0523/EDA-Spring2023
 
