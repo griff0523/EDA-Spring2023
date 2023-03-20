@@ -1,9 +1,12 @@
 ---
-title: 'A07 - Crafting Reports'
-author: "Griffin Bird" 
+title: "A07 - Crafting Reports"
+author: "Griffin Bird"
 date: "Spring 2023"
-output: pdf_document
-
+output:
+  html_document:
+    df_print: paged
+  toc: yes
+  pdf_document: default
 ---
 
 ## Objectives:
@@ -26,7 +29,7 @@ output: pdf_document
 
 Create a table below summarizing the metadata of the EPA Air Quality data. The first column will be the metadata attribute item name: "Source", "Date", and "Filename". And the second column will include the metadata values: "EPA Air Quality SYstem (AQS)", "2018-2019", and "EPAair_O3_PM25_NC1819_Processed.csv". The first column should be aligned to the right and the second to the left.
 
-```{r initial}
+```{r initial, message=FALSE, warning=FALSE, results="hide"}
 library(tidyverse)
 library(agricolae)
 library(here)
@@ -38,11 +41,14 @@ library(knitr)
 library(dplyr)
 library(gt)
 library(kableExtra)
+library(tinytex)
 
 knitr::opts_chunk$set(tidy.opts=list(width.cutoff=80), tidy=TRUE)
 
 here()
+```
 
+```{r table}
 AirQuality <- read.csv("C:/Users/17038/Documents/EDASpring2023/Data/Processed/EPAair_O3_PM25_NC1819_Processed.csv")
 
 Metadata <- data.frame("Metadata Attributes"=rep(c('Source', 'Date', 'Filename')), "Values"=rep(c('EPA Air Quality SYstem (AQS)', '2018-2019', 'EPAair_O3_PM25_NC1819_Processed.csv')))
@@ -131,7 +137,8 @@ filter(AirQuality, Year == 2018) %>%
     y = 'Ozone (g/m^3)')
 
 
-  ```
+```
+
 ```{r Ozone2019, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Ozone Levels by Month 2019", fig.align='right', fig.height= 2.5}
 
 filter(AirQuality, Year == 2019) %>%

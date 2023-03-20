@@ -183,110 +183,35 @@ first column should be aligned to the right and the second to the left.
 \begin{Shaded}
 \begin{Highlighting}[]
 \FunctionTok{library}\NormalTok{(tidyverse)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## -- Attaching packages --------------------------------------- tidyverse 1.3.2 --
-## v ggplot2 3.3.6      v purrr   0.3.4 
-## v tibble  3.1.8      v dplyr   1.0.10
-## v tidyr   1.2.1      v stringr 1.4.1 
-## v readr   2.1.2      v forcats 0.5.2 
-## -- Conflicts ------------------------------------------ tidyverse_conflicts() --
-## x dplyr::filter() masks stats::filter()
-## x dplyr::lag()    masks stats::lag()
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \FunctionTok{library}\NormalTok{(agricolae)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## Warning: package 'agricolae' was built under R version 4.2.2
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \FunctionTok{library}\NormalTok{(here)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## Warning: package 'here' was built under R version 4.2.2
-\end{verbatim}
-
-\begin{verbatim}
-## here() starts at C:/Users/17038/Documents/EDASpring2023
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \FunctionTok{library}\NormalTok{(ggplot2)}
 \FunctionTok{library}\NormalTok{(ggthemes)}
 \FunctionTok{library}\NormalTok{(dplyr)}
 \FunctionTok{library}\NormalTok{(lubridate)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## 
-## Attaching package: 'lubridate'
-## 
-## The following objects are masked from 'package:base':
-## 
-##     date, intersect, setdiff, union
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \FunctionTok{library}\NormalTok{(knitr)}
 \FunctionTok{library}\NormalTok{(dplyr)}
 \FunctionTok{library}\NormalTok{(gt)}
 \FunctionTok{library}\NormalTok{(kableExtra)}
-\end{Highlighting}
-\end{Shaded}
+\FunctionTok{library}\NormalTok{(tinytex)}
 
-\begin{verbatim}
-## Warning: package 'kableExtra' was built under R version 4.2.2
-\end{verbatim}
-
-\begin{verbatim}
-## 
-## Attaching package: 'kableExtra'
-## 
-## The following object is masked from 'package:dplyr':
-## 
-##     group_rows
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \NormalTok{knitr}\SpecialCharTok{::}\NormalTok{opts\_chunk}\SpecialCharTok{$}\FunctionTok{set}\NormalTok{(}\AttributeTok{tidy.opts=}\FunctionTok{list}\NormalTok{(}\AttributeTok{width.cutoff=}\DecValTok{80}\NormalTok{), }\AttributeTok{tidy=}\ConstantTok{TRUE}\NormalTok{)}
 
 \FunctionTok{here}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
 
-\begin{verbatim}
-## [1] "C:/Users/17038/Documents/EDASpring2023"
-\end{verbatim}
-
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{AirQuality }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"C:/Users/17038/Documents/EDASpring2023/Data/Processed/EPAair\_O3\_PM25\_NC1819\_Processed.csv"}\NormalTok{)}
 
-\NormalTok{Metadata }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\StringTok{"Metadata Attributes"}\OtherTok{=}\FunctionTok{rep}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}Source\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}Date\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}Filename\textquotesingle{}}\NormalTok{)), }\StringTok{"Values"}\OtherTok{=}\FunctionTok{rep}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}EPA Air Quality SYstem (AQS)\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}2018{-}2019\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}EPAair\_O3\_PM25\_NC1819\_Processed.csv\textquotesingle{}}\NormalTok{)))}
+\NormalTok{Metadata }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\StringTok{\textasciigrave{}}\AttributeTok{Metadata Attributes}\StringTok{\textasciigrave{}} \OtherTok{=} \FunctionTok{rep}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\StringTok{"Source"}\NormalTok{, }\StringTok{"Date"}\NormalTok{, }\StringTok{"Filename"}\NormalTok{)),}
+    \AttributeTok{Values =} \FunctionTok{rep}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\StringTok{"EPA Air Quality SYstem (AQS)"}\NormalTok{, }\StringTok{"2018{-}2019"}\NormalTok{, }\StringTok{"EPAair\_O3\_PM25\_NC1819\_Processed.csv"}\NormalTok{)))}
 
 \NormalTok{Metadata }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{gt}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{cols\_align}\NormalTok{(}
-    \AttributeTok{align =} \StringTok{"right"}\NormalTok{,}
-    \AttributeTok{columns =}\NormalTok{ Metadata.Attributes) }\SpecialCharTok{\%\textgreater{}\%}
-  \FunctionTok{cols\_align}\NormalTok{(}
-    \AttributeTok{align =} \StringTok{"left"}\NormalTok{,}
-    \AttributeTok{columns =}\NormalTok{ Values)}
+    \FunctionTok{gt}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%}
+    \FunctionTok{cols\_align}\NormalTok{(}\AttributeTok{align =} \StringTok{"right"}\NormalTok{, }\AttributeTok{columns =}\NormalTok{ Metadata.Attributes) }\SpecialCharTok{\%\textgreater{}\%}
+    \FunctionTok{cols\_align}\NormalTok{(}\AttributeTok{align =} \StringTok{"left"}\NormalTok{, }\AttributeTok{columns =}\NormalTok{ Values)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -445,6 +370,7 @@ caption (title) to your plot that will display underneath the figure.
 
 \caption{Ozone Levels by Month 2018}\label{fig:Ozone2018}
 \end{figure}
+
 \begin{figure}
 
 \hfill{}\includegraphics{GriffinBird_A07_Lab_Crafting_Reports_files/figure-latex/Ozone2019-1} 

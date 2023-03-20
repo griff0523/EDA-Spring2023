@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.3.20)  20 MAR 2023 16:44
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.3.20)  20 MAR 2023 17:24
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -277,9 +277,75 @@ Package: colortbl 2022/06/20 v1.0f Color table columns (DPC)
 \everycr=\toks30
 \minrowclearance=\skip62
 \rownum=\count289
+) (c:/Users/17038/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pdflscape/pdflscape.sty
+Package: pdflscape 2022-10-27 v0.13 Display of landscape pages in PDF
+(c:/Users/17038/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pdflscape/pdflscape-nometadata.sty
+Package: pdflscape-nometadata 2022-10-28 v0.13 Display of landscape pages in PDF (HO)
+(c:/Users/17038/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/lscape.sty
+Package: lscape 2020/05/28 v3.02 Landscape Pages (DPC)
+)
+Package pdflscape Info: Auto-detected driver: pdftex on input line 81.
+)) (c:/Users/17038/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tabu/tabu.sty
+Package: tabu 2019/01/11 v2.9 - flexible LaTeX tabulars (FC+tabu-fixed)
+(c:/Users/17038/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/varwidth/varwidth.sty
+Package: varwidth 2009/03/30 ver 0.92;  Variable-width minipages
+\@vwid@box=\box64
+\sift@deathcycles=\count290
+\@vwid@loff=\dimen183
+\@vwid@roff=\dimen184
+)
+\c@taburow=\count291
+\tabu@nbcols=\count292
+\tabu@cnt=\count293
+\tabu@Xcol=\count294
+\tabu@alloc=\count295
+\tabu@nested=\count296
+\tabu@target=\dimen185
+\tabu@spreadtarget=\dimen186
+\tabu@naturalX=\dimen187
+\tabucolX=\dimen188
+\tabu@Xsum=\dimen189
+\extrarowdepth=\dimen190
+\abovetabulinesep=\dimen191
+\belowtabulinesep=\dimen192
+\tabustrutrule=\dimen193
+\tabu@thebody=\toks31
+\tabu@footnotes=\toks32
+\tabu@box=\box65
+\tabu@arstrutbox=\box66
+\tabu@hleads=\box67
+\tabu@vleads=\box68
+\tabu@cellskip=\skip63
+) (c:/Users/17038/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/threeparttable/threeparttable.sty
+Package: threeparttable 2003/06/13  v 3.0
+\@tempboxb=\box69
+) (c:/Users/17038/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/threeparttablex/threeparttablex.sty
+Package: threeparttablex 2013/07/23 v0.3 by daleif
+(c:/Users/17038/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/environ/environ.sty
+Package: environ 2014/05/04 v0.3 A new way to define environments
+(c:/Users/17038/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/trimspaces/trimspaces.sty
+Package: trimspaces 2009/09/17 v1.1 Trim spaces around a token list
+))
+\TPTL@width=\skip64
+) (c:/Users/17038/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/ulem/ulem.sty
+\UL@box=\box70
+\UL@hyphenbox=\box71
+\UL@skip=\skip65
+\UL@hook=\toks33
+\UL@height=\dimen194
+\UL@pe=\count297
+\UL@pixel=\dimen195
+\ULC@box=\box72
+Package: ulem 2019/11/18
+\ULdepth=\dimen196
+) (c:/Users/17038/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/makecell/makecell.sty
+Package: makecell 2009/08/03 V0.1e Managing of Tab Column Heads and Cells
+\rotheadsize=\dimen197
+\c@nlinenum=\count298
+\TeXr@lab=\toks34
 )
 
-! LaTeX Error: File `pdflscape.sty' not found.
+! LaTeX Error: File `caption.sty' not found.
 
 Type X to quit or <RETURN> to proceed,
 or enter new name. (Default extension: sty)
@@ -288,15 +354,15 @@ Enter file name:
 ! Emergency stop.
 <read *> 
          
-l.102 \usepackage
-                 {tabu}^^M 
+l.110 \ifLuaTeX
+               ^^M 
 Here is how much of TeX's memory you used:
- 4361 strings out of 477984
- 63983 string characters out of 5837741
+ 5592 strings out of 477984
+ 85355 string characters out of 5837741
  1849382 words of memory out of 5000000
- 24533 multiletter control sequences out of 15000+600000
- 515277 words of font info for 33 fonts, out of 8000000 for 9000
+ 25722 multiletter control sequences out of 15000+600000
+ 515383 words of font info for 34 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 57i,0n,62p,270b,92s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 66i,0n,64p,270b,92s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
 !  ==> Fatal error occurred, no output PDF file produced!
