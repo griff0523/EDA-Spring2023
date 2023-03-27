@@ -2,11 +2,7 @@
 title: "A07 - Crafting Reports"
 author: "Griffin Bird"
 date: "Spring 2023"
-output:
-  html_document:
-    df_print: paged
-  toc: yes
-  pdf_document: default
+output: pdf_document
 ---
 
 ## Objectives:
