@@ -1,6 +1,6 @@
 ---
 title: "Assignment 8: Time Series Analysis"
-author: "Student Name"
+author: "Griffin Bird"
 date: "Spring 2023"
 output: pdf_document
 geometry: margin=2.54cm
@@ -26,15 +26,43 @@ This exercise accompanies the lessons in Environmental Data Analytics on general
 * Load the tidyverse, lubridate, zoo, and trend packages
 * Set your ggplot theme
 
-```{r}
+```{r setup}
 #1
+library(knitr)
+library(tidyverse)
+library(lubridate)
+library(here)
+library(cowplot)
+library(ggplot2)
+library(ggthemes)
+library(zoo)
+library(trend)
+
+here
+getwd()
+
+mytheme <- theme_wsj() + theme(plot.title = element_text(hjust = 0.5), 
+   panel.grid.minor = element_line(color = 2,
+   size = 0.25,
+   linetype = 1),
+  legend.position = "bottom", 
+  axis.text = element_text(face="plain", size = 12),
+  axis.title=element_text(size=14),
+  title = element_text(size=14))
+
+theme_set(mytheme)
+
 ```
 
 
 2. Import the ten datasets from the Ozone_TimeSeries folder in the Raw data folder. These contain ozone concentrations at Garinger High School in North Carolina from 2010-2019 (the EPA air database only allows downloads for one year at a time). Import these either individually or in bulk and then combine them into a single dataframe named `GaringerOzone` of 3589 observation and 20 variables. 
 
-```{r, message = FALSE}
+```{r data import, message = FALSE}
 #2
+
+Garinger <- list.files(path="~/EDASpring2023/Data/Raw/Ozone_TimeSeries", full.names = TRUE) %>% 
+  lapply(read_csv) %>% 
+  bind_rows 
 
 ```
 
@@ -50,13 +78,19 @@ This exercise accompanies the lessons in Environmental Data Analytics on general
 
 ```{r}
 #3
+Garinger$Date <- as.Date(Garinger$Date, format = "%m/%d/%Y")
 
 #4
+Garinger_Filter <- Garinger %>%
+  select(Date, `Daily Max 8-hour Ozone Concentration`, DAILY_AQI_VALUE)
 
 #5
+Days <- as.data.frame(x= seq(as.Date("2010/1/1"), as.Date("2019/12/31"), by = "day")) %>%
+  rename("Date" = 1)
 
 #6
-
+GaringerOzone <- left_join(x=Days, y=Garinger_Filter) %>%
+  rename("Daily8hrMax" = 2)
 
 ```
 
@@ -66,10 +100,17 @@ This exercise accompanies the lessons in Environmental Data Analytics on general
 
 ```{r}
 #7
+ozone.plot <- ggplot(GaringerOzone, aes(x = Date, y = Daily8hrMax)) + 
+  labs(title = "Ozone Concentration Over Time",
+       x = "Date",
+       y = "Ozone (ppm)") +
+    geom_smooth(method = lm, color = "black") +
+  geom_point()
 
+print(ozone.plot)
 ```
 
->Answer:
+>Answer: The plot suggests a negative trend in ozone concentration over time.
 
 ## Time Series Analysis
 
@@ -79,6 +120,9 @@ Study question: Have ozone concentrations changed over the 2010s at this station
 
 ```{r}
 #8
+
+GaringerOzone_Interp <- GaringerOzone %>%
+  mutate(Daily8hrMax = na.approx(Daily8hrMax))
 
 ```
 
@@ -90,6 +134,15 @@ Study question: Have ozone concentrations changed over the 2010s at this station
 ```{r}
 #9
 
+GaringerOzone.monthly <- GaringerOzone_Interp %>% 
+  mutate(Year = format(Date, "%Y"), Month = format(Date, "%m")) %>%
+           group_by(Year, Month) %>%
+  summarise(Daily8hrMax.Mean = mean(Daily8hrMax))
+           
+GaringerOzone.monthly <- GaringerOzone.monthly %>%
+  mutate(Date = as.Date(as.yearmon(paste(Year, Month), "%Y %m")))
+
+
 ```
 
 
@@ -98,6 +151,10 @@ Study question: Have ozone concentrations changed over the 2010s at this station
 ```{r}
 #10
 
+GaringerOzone.daily.ts <- ts(GaringerOzone_Interp$Daily8hrMax, start = c(2010,1), end = c(2020), frequency=365)
+
+GaringerOzone.monthly.ts <- ts(GaringerOzone.monthly$Daily8hrMax.Mean, start = c(2010,1), end = c(2019, 12), frequency=12)
+
 ```
 
 
@@ -105,7 +162,11 @@ Study question: Have ozone concentrations changed over the 2010s at this station
 
 ```{r}
 #11
-
+GaringerOzone.daily.ts_decomposed <- stl(GaringerOzone.daily.ts, s.window="periodic")
+plot(GaringerOzone.daily.ts_decomposed)
+  
+GaringerOzone.monthly.ts_decomposed <- stl(GaringerOzone.monthly.ts, s.window="periodic")
+plot(GaringerOzone.monthly.ts_decomposed)
 
 ```
 
@@ -126,8 +187,14 @@ Study question: Have ozone concentrations changed over the 2010s at this station
 ```{r}
 #13
 
+monthly.ozone.plot <- ggplot(GaringerOzone.monthly, aes(x = Date, y = Daily8hrMax.Mean)) + 
+  labs(title = "Average Monthly Ozone Concentration Over Time",
+       x = "Date",
+       y = "Ozone (ppm)") +
+  geom_point() +
+  geom_line()
 
-
+print(monthly.ozone.plot)
 
 ```
 
@@ -141,8 +208,9 @@ Study question: Have ozone concentrations changed over the 2010s at this station
 
 ```{r}
 #15
+GaringerOzone.monthly.ts.Components <- as.data.frame(GaringerOzone.monthly.ts_decomposed$time.series[,1:3])
 
-
+GaringerOzone.monthly.ts.nonseasonal <- (GaringerOzone.monthly.ts - GaringerOzone.monthly.ts.Components$seasonal)
 
 #16
 
