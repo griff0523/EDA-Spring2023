@@ -1,6 +1,6 @@
 ---
 title: "Assignment 9: Spatial Analysis in R"
-author: "Student Name"
+author: "Griffin Bird"
 output: pdf_document
 geometry: margin=2.54cm
 editor_options: 
@@ -31,10 +31,17 @@ This exercise accompanies the lessons in Environmental Data Analytics (ENV872L) 
 
 ```{r Prepare workspace}
 #1. 
-
+library(tidyverse)
+library(sf)
+library(leaflet)
+library(mapview)
+library(here)
+library(tidyverse, quietly = TRUE)
+library(lubridate)
 
 #2. 
-
+here
+getwd()
 
 ```
 
@@ -48,19 +55,22 @@ In this exercise, we will be exploring stream gage height data in Nebraska corre
 
 ```{r Read the county data into an sf dataframe}
 #3. Read in Counties shapefile into an sf dataframe, filtering for just NE counties
-
+Counties <- st_read('./Data/Spatial/cb_2018_us_county_20m.shp') %>%
+  filter(STATEFP == 31)
 
 #4. Reveal the CRS of the counties features
-
+st_crs(Counties)
+st_crs(Counties)$epsg
 
 #5. Plot the data
-
+ggplot(data=Counties) +
+  geom_sf()
 ```
 
 6. What is the EPSG code of the Counties dataset? Is this a geographic or a projected coordinate reference system? (Or, does this CRS use angular or planar coordinate units?) To what datum is this CRS associated? (Tip: look the EPSG code on <https://spatialreference.org>) 
 
-> ANSWER: 
-> 
+> ANSWER: The EPSG code for the Counties dataset is 4269 and is associated with NAD83. This is a geographic coordinate reference system.
+
 
 
 ### Read in gage locations csv as a dataframe, then display the column names it contains

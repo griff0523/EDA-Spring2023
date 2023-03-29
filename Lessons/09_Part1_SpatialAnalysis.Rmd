@@ -76,7 +76,7 @@ Let's read some geospatial data into our coding environment. The file we'll read
 #Read a spatial dataset
 GasPlants <- st_read('https://opendata.arcgis.com/datasets/a0722062315143a7980cebb79a204781_4.geojson')
 #Alternative
-#GasPlants <- st_read('./Data/Spatial/Manufactured_Gas_Plant_Sites.geojson')
+GasPlants <- st_read('./Data/Spatial/Manufactured_Gas_Plant_Sites.geojson')
 
 #Explore
 class(GasPlants)
