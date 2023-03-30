@@ -1,0 +1,63 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
+
+## OVERVIEW
+
+This exercise accompanies the lessons in Environmental Data Analytics on generalized linear models.
+
+## Directions
+
+1.  Rename this file `<FirstLast>_A08_TimeSeries.Rmd` (replacing `<FirstLast>` with your first and last name).
+2.  Change "Student Name" on line 3 (above) with your name.
+3.  Work through the steps, **creating code and output** that fulfill each instruction.
+4.  Be sure to **answer the questions** in this assignment document.
+5.  When you have completed the assignment, **Knit** the text and code into a single PDF file.
+
+## Set up
+
+1.  Set up your session:
+
+-   Check your working directory
+-   Load the tidyverse, lubridate, zoo, and trend packages
+-   Set your ggplot theme
+
+```{r data setup, message = FALSE}
+#1
+library(knitr)
+library(tidyverse)
+library(lubridate)
+library(here)
+library(cowplot)
+library(ggplot2)
+library(ggthemes)
+library(zoo)
+library(trend)
+library(Kendall)
+
+here
+getwd()
+
+mytheme <- theme_wsj() + theme(plot.title = element_text(hjust = 0.5), 
+   panel.grid.minor = element_line(color = 2,
+   size = 0.25,
+   linetype = 1),
+  legend.position = "bottom", 
+  axis.text = element_text(face="plain", size = 12),
+  axis.title=element_text(size=14),
+  title = element_text(size=14))
+
+theme_set(mytheme)
+
+```
+
+```{r data import}
+#2
+
+Garinger <- list.files(path="~/EDASpring2023/Data/Raw/Ozone_TimeSeries", full.names = TRUE) %>% 
+  lapply(read_csv) %>% 
+  bind_rows 
+
+```
