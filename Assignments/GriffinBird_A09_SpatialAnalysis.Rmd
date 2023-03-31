@@ -38,6 +38,20 @@ library(mapview)
 library(here)
 library(tidyverse, quietly = TRUE)
 library(lubridate)
+library(ggplot2)
+library(ggthemes)
+
+mytheme <- theme_wsj() + theme(plot.title = element_text(hjust = 0.5), 
+   panel.grid.minor = element_line(color = 2,
+   size = 0.25,
+   linetype = 1),
+  legend.position = "bottom", 
+  axis.text = element_text(face="plain", size = 12),
+  axis.title=element_text(size=14),
+  title = element_text(size=14))
+
+theme_set(mytheme)
+
 
 #2. 
 here
@@ -86,13 +100,12 @@ Next we'll read in some USGS/NWIS gage location data added to the `Data/Raw` fol
 GageLocations <- read.csv('./Data/Raw/NWIS_SiteInfo_NE_RAW.csv')
 
 #8. Reveal the names of the columns
-
+colnames(GageLocations)
 
 ```
 
 9. What columns in the dataset contain the x and y coordinate values, respectively?  
-> ANSWER:
-> 
+> ANSWER: X coordinate values are in column dec_long_va and y values are in dec_lat_va.
 
 
 ### Convert the dataframe to a spatial features ("sf") dataframe
@@ -104,17 +117,20 @@ GageLocations <- read.csv('./Data/Raw/NWIS_SiteInfo_NE_RAW.csv')
 
 ```{r Convert dataframe to sf dataframe}
 #10. Convert to an sf object
+GageLocations.Spatial <- GageLocations %>%
+  st_as_sf(coords=c('dec_long_va', 'dec_lat_va'), crs=4269)
 
+mapview(GageLocations.Spatial)
 
 #11. Re-examine the column names
 
+colnames(GageLocations.Spatial)
 
 ```
 
 12. What new field(s) appear in the sf dataframe created? What field(s), if any, disappeared?
 
->ANSWER: 
->
+>ANSWER: The columns containing the X and Y coordinate values were deleted and a geometry column was added.
 
 
 ### Plot the gage locations on top of the counties
@@ -127,7 +143,12 @@ GageLocations <- read.csv('./Data/Raw/NWIS_SiteInfo_NE_RAW.csv')
 ```{r Plot the spatial features}
 #13. Plot the gage locations atop the county features
 
+NEGages <- ggplot() +
+  geom_sf(data=Counties, fill = 'gray') +
+  geom_sf(data=GageLocations.Spatial, color = 'deepskyblue4') +
+  labs(title = "NWIS Gage Locations in Nebraska", subtitle = "Created by Griffin Bird")
 
+print(NEGages)
 ```
 
 
@@ -147,19 +168,23 @@ Lastly, we want to attach some gage height data to our site locations. I've cons
 
 ```{r}
 #14. Read the site flow data into a data frame
-
+SiteFlow <- read.csv('./Data/Raw/NWIS_SiteFlowData_NE_RAW.csv', stringsAsFactors = TRUE)
 
 #15. Show the column names
-
+colnames(SiteFlow)
 
 #16. Join the flow data to our NWIS gage location spatial dataframe
+Gage_Flow <- merge(x=GageLocations.Spatial,
+                   y=SiteFlow,
+                   by.x = 'site_no',
+                   by.y = 'site_no')
 
 
 #17. Show the column names of the joined dataset
-
+colnames(Gage_Flow)
 
 #18. Show the dimensions of this joined dataset
-
+dim(Gage_Flow)
 
 ```
 
@@ -171,6 +196,10 @@ Now we can examine where the flooding appears most acute by visualizing gage hei
 
 ```{r}
 #Map the points, sized by gage height
+GageHeight <- ggplot() +
+  geom_sf(data=Counties, fill = 'gray') +
+  geom_sf(data=Gage_Flow, fill='gage_ht' = 'deepskyblue4') +
+  labs(title = "NWIS Gage Locations in Nebraska", subtitle = "Created by Griffin Bird")
 
 
 ```
