@@ -40,6 +40,7 @@ library(tidyverse, quietly = TRUE)
 library(lubridate)
 library(ggplot2)
 library(ggthemes)
+library(dplyr)
 
 mytheme <- theme_wsj() + theme(plot.title = element_text(hjust = 0.5), 
    panel.grid.minor = element_line(color = 2,
@@ -170,12 +171,16 @@ Lastly, we want to attach some gage height data to our site locations. I've cons
 #14. Read the site flow data into a data frame
 SiteFlow <- read.csv('./Data/Raw/NWIS_SiteFlowData_NE_RAW.csv', stringsAsFactors = TRUE)
 
-#15. Show the column names
-colnames(SiteFlow)
+Site.Flow.mean <- SiteFlow %>%
+  group_by(site_no, station_nm) %>%
+  summarise(gage_ht.mean = mean(gage_ht))
+
+#15 Show the column names
+colnames(Site.Flow.mean)
 
 #16. Join the flow data to our NWIS gage location spatial dataframe
 Gage_Flow <- merge(x=GageLocations.Spatial,
-                   y=SiteFlow,
+                   y=Site.Flow.mean,
                    by.x = 'site_no',
                    by.y = 'site_no')
 
@@ -198,10 +203,10 @@ Now we can examine where the flooding appears most acute by visualizing gage hei
 #Map the points, sized by gage height
 GageHeight <- ggplot() +
   geom_sf(data=Counties, fill = 'gray') +
-  geom_sf(data=Gage_Flow, fill='gage_ht' = 'deepskyblue4') +
-  labs(title = "NWIS Gage Locations in Nebraska", subtitle = "Created by Griffin Bird")
+  geom_sf(data=Gage_Flow, aes(size=gage_ht.mean), alpha = 0.3, color = 'deepskyblue4') +
+  labs(title = "NWIS Gage Heights in Nebraska", subtitle = "Created by Griffin Bird")
 
-
+print(GageHeight)
 ```
 
 ---
@@ -219,9 +224,17 @@ Up next we will do some spatial analysis with our data. To prepare for this, we 
 ```{r}
 #20 Transform the counties and gage location datasets to UTM Zone 14
 
+st_transform(Gage_Flow, crs = 32614)
 
 #21 Plot the data
 
+mapview(Gage_Flow)
+
+NECounties <- ggplot() +
+  geom_sf(data=Counties, (aes(fill=NAME))) +
+  labs(title = "Nebraska Counties", subtitle = "Created by Griffin Bird")
+
+print(NECounties)
 
 ```
 
@@ -239,13 +252,22 @@ Now let's zoom into a particular county and examine the gages located there.
 
 ```{r}
 #22 Select the county
-
+Douglas.County <- Counties %>% 
+  filter(NAME == "Douglas")
 
 #23 Select gages within the selected county
+Douglas.Gages <- Gage_Flow %>%
+  st_filter(Douglas.County, .predicate = st_within)
 
+mapview(Douglas.Gages)
 
 #24 Plot
+DouglasMap <- ggplot() +
+  geom_sf(data=Counties, fill = 'darkgray') +
+  geom_sf(data=Douglas.County, fill = 'lightgray') +
+  geom_sf(data=Douglas.Gages, size = 0.25, color = 'deepskyblue4') +
+  labs(title = "Gages in Douglas, Nebraska")
 
-
+print(DouglasMap)
 
 ```
