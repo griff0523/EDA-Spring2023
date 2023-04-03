@@ -1,11 +1,14 @@
 ---
-title: "Assignment 9: Spatial Analysis in R"
+title: 'Assignment 9: Spatial Analysis in R'
 author: "Griffin Bird"
-output: pdf_document
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
 geometry: margin=2.54cm
-editor_options: 
+editor_options:
   chunk_output_type: console
-  markdown: 
+  markdown:
     wrap: 72
 ---
 
@@ -29,7 +32,7 @@ This exercise accompanies the lessons in Environmental Data Analytics (ENV872L) 
 1. Import libraries: tidyverse, sf, leaflet, and mapview
 2. Check your working directory
 
-```{r Prepare workspace}
+```{r Prepare workspace, message=FALSE, warning=FALSE}
 #1. 
 library(tidyverse)
 library(sf)
@@ -70,7 +73,7 @@ In this exercise, we will be exploring stream gage height data in Nebraska corre
 
 ```{r Read the county data into an sf dataframe}
 #3. Read in Counties shapefile into an sf dataframe, filtering for just NE counties
-Counties <- st_read('./Data/Spatial/cb_2018_us_county_20m.shp') %>%
+Counties <- st_read('~/EDASpring2023/Data/Spatial/cb_2018_us_county_20m.shp') %>%
   filter(STATEFP == 31)
 
 #4. Reveal the CRS of the counties features
@@ -98,7 +101,7 @@ Next we'll read in some USGS/NWIS gage location data added to the `Data/Raw` fol
 ```{r Read in USGS Gage Locations}
 #7. Read in gage locations csv as a dataframe
 
-GageLocations <- read.csv('./Data/Raw/NWIS_SiteInfo_NE_RAW.csv')
+GageLocations <- read.csv('~/EDASpring2023/Data/Raw/NWIS_SiteInfo_NE_RAW.csv')
 
 #8. Reveal the names of the columns
 colnames(GageLocations)
@@ -106,6 +109,7 @@ colnames(GageLocations)
 ```
 
 9. What columns in the dataset contain the x and y coordinate values, respectively?  
+
 > ANSWER: X coordinate values are in column dec_long_va and y values are in dec_lat_va.
 
 
@@ -147,7 +151,7 @@ colnames(GageLocations.Spatial)
 NEGages <- ggplot() +
   geom_sf(data=Counties, fill = 'gray') +
   geom_sf(data=GageLocations.Spatial, color = 'deepskyblue4') +
-  labs(title = "NWIS Gage Locations in Nebraska", subtitle = "Created by Griffin Bird")
+  labs(title = "NWIS Gage Locations in Nebraska", subtitle = "Plot created by Griffin Bird")
 
 print(NEGages)
 ```
@@ -167,9 +171,9 @@ Lastly, we want to attach some gage height data to our site locations. I've cons
 17. Show the column names in this resulting spatial features object
 18. Show the dimensions of the resulting joined dataframe
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 #14. Read the site flow data into a data frame
-SiteFlow <- read.csv('./Data/Raw/NWIS_SiteFlowData_NE_RAW.csv', stringsAsFactors = TRUE)
+SiteFlow <- read.csv('~/EDASpring2023/Data/Raw/NWIS_SiteFlowData_NE_RAW.csv', stringsAsFactors = TRUE)
 
 Site.Flow.mean <- SiteFlow %>%
   group_by(site_no, station_nm) %>%
@@ -225,16 +229,16 @@ Up next we will do some spatial analysis with our data. To prepare for this, we 
 #20 Transform the counties and gage location datasets to UTM Zone 14
 
 st_transform(Gage_Flow, crs = 32614)
+st_transform(Counties, crs = 32614)
 
 #21 Plot the data
 
-mapview(Gage_Flow)
+Counties.And.Gages.UTM14 <- ggplot() +
+  geom_sf(data=Counties, fill = 'gray') +
+  geom_sf(data=Gage_Flow, color = 'skyblue2') +
+  labs(title = "NWIS Gage Heights in Nebraska", subtitle = "Created by Griffin Bird")
 
-NECounties <- ggplot() +
-  geom_sf(data=Counties, (aes(fill=NAME))) +
-  labs(title = "Nebraska Counties", subtitle = "Created by Griffin Bird")
-
-print(NECounties)
+print(Counties.And.Gages.UTM14)
 
 ```
 
