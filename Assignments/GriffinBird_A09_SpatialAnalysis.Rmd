@@ -236,7 +236,7 @@ st_transform(Counties, crs = 32614)
 Counties.And.Gages.UTM14 <- ggplot() +
   geom_sf(data=Counties, fill = 'gray') +
   geom_sf(data=Gage_Flow, color = 'skyblue2') +
-  labs(title = "NWIS Gage Heights in Nebraska", subtitle = "Created by Griffin Bird")
+  labs(title = "NWIS Gage Locations in Nebraska", subtitle = "Created by Griffin Bird")
 
 print(Counties.And.Gages.UTM14)
 
