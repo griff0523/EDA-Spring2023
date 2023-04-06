@@ -28,7 +28,27 @@ This exercise accompanies the lessons in Environmental Data Analytics on data sc
 
 ```{r, message = FALSE}
 #1
+library(rvest)
+library(here)
+library(tidyverse, quietly = TRUE)
+library(lubridate)
+library(ggplot2)
+library(ggthemes)
+library(dplyr)
 
+mytheme <- theme_wsj() + theme(plot.title = element_text(hjust = 0.5), 
+   panel.grid.minor = element_line(color = 2,
+   size = 0.25,
+   linetype = 1),
+  legend.position = "bottom", 
+  axis.text = element_text(face="plain", size = 12),
+  axis.title=element_text(size=14),
+  title = element_text(size=14))
+
+theme_set(mytheme)
+
+here
+getwd()
 
 ```
 
@@ -41,7 +61,7 @@ Indicate this website as the as the URL to be scraped. (In other words, read the
 
 ```{r set.the.scraping.website}
 #2
-
+webpage <- read_html('https://www.ncwater.org/WUDC/app/LWSP/report.php?pwsid=03-32-010&year=2022')
 
 ```
 
@@ -61,14 +81,25 @@ In the code chunk below scrape these values, assigning them to four separate var
 
 ```{r scrape.the.data}
 #3
-water.system.name <- 
-  
-PWSID <- 
-  
-ownership <- 
+water.system.name <- webpage %>%
+  html_node("div+ table tr:nth-child(1) td:nth-child(2)") %>%
+  html_text()
+water.system.name
 
-max.withdrawals.mgd <- 
+PWSID <- webpage %>%
+  html_node("td tr:nth-child(1) td:nth-child(5)") %>%
+  html_text()
+PSWID
 
+ownership <- webpage %>%
+  html_node("div+ table tr:nth-child(2) td:nth-child(4)") %>%
+  html_text()
+onwership
+
+max.withdrawals.mgd <- webpage %>%
+  html_node(".fancy-table:nth-child(34) td:nth-child(5)") %>%
+  html_text()
+max.withdrawals.mgd
 ```
 
 
