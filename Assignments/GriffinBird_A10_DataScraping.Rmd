@@ -89,15 +89,15 @@ water.system.name
 PWSID <- webpage %>%
   html_node("td tr:nth-child(1) td:nth-child(5)") %>%
   html_text()
-PSWID
+PWSID
 
 ownership <- webpage %>%
   html_node("div+ table tr:nth-child(2) td:nth-child(4)") %>%
   html_text()
-onwership
+ownership
 
 max.withdrawals.mgd <- webpage %>%
-  html_node(".fancy-table:nth-child(34) td:nth-child(5)") %>%
+  html_nodes("th~ td+ td") %>%
   html_text()
 max.withdrawals.mgd
 ```
@@ -113,19 +113,77 @@ max.withdrawals.mgd
 
 ```{r create.a.dataframe.from.scraped.data}
 #4
+ScrapedData <- data.frame("Water System Name"=rep(c(water.system.name)), 
+                          "PWSID"=rep(c(PWSID)),
+                          "Ownership"=rep(c(ownership)),
+                          "Max Daily Use"=c(max.withdrawals.mgd),
+                          "Month" = c(month.abb),
+                          Year = rep(c(2022)))
 
-
+ScrapedData <- ScrapedData %>% 
+  mutate(Date = my(paste(Month,"-",Year))) %>%
+  select(Water.System.Name, PWSID, Ownership, Max.Daily.Use, Month, Date)
 
 #5
 
+MaxUsePlot <- ggplot(ScrapedData, aes(x = Month, y = max.withdrawals.mgd)) + 
+  labs(title = "Durham Maximum Daily Water Use in 2022",
+       x = "Date",
+       y = "Maximum Daily Use (MGD)") +
+  scale_x_discrete(limits = month.abb) +
+  geom_point()
 
+MaxUsePlot
 ```
 
 6. Note that the PWSID and the year appear in the web address for the page we scraped. Construct a function using your code above that can scrape data for any PWSID and year for which the NC DEQ has data. **Be sure to modify the code to reflect the year and site (pwsid) scraped**.
 
 ```{r construct.a.scraping.function}
-#6.
+scrape.it <- function(the_year, ID){
+  
+  #Retrieve the website contents 
+  the_website <- read_html(paste0( 'https://www.ncwater.org/WUDC/app/LWSP/report.php?pwsid=', ID,'&year=', the_year))
 
+  
+  #Set the element address variables (determined in the previous step)
+  the_registrant_tag <- '.table tr:nth-child(1) td:nth-child(2)'
+  the_facility_name_tag <- 'tr:nth-child(2) th+ .left:nth-child(2)'
+  the_facility_id_tag <- 'tr:nth-child(2) .left~ .left+ td.left'
+  the_data_tag <- '.table:nth-child(7) td:nth-child(7) , .table:nth-child(7) td:nth-child(3)'
+  
+  #Scrape the data items
+  the_registrant <- the_website %>% html_nodes(the_registrant_tag) %>% html_text()
+  the_facility_name <- the_website %>%   html_nodes(the_facility_name_tag) %>%  html_text()
+  the_facility_type <- the_website %>% html_nodes(the_facility_id_tag) %>% html_text()
+  avg_withdrawals <- the_website %>% html_nodes(the_data_tag) %>% html_text()
+  
+  #Convert to a dataframe
+  df_withdrawals <- data.frame("Month" = rep(1:12),
+                               "Year" = rep(the_year,12),
+                               "Avg_Withdrawals_mgd" = as.numeric(avg_withdrawals)) %>% 
+    mutate(Registrant = !!the_registrant,
+           Facility_name = !!the_facility_name,
+           Facility_type = !!the_facility_type,
+           Date = my(paste(Month,"-",Year)))
+  
+  #Pause for a moment - scraping etiquette
+  #Sys.sleep(1) #uncomment this if you are doing bulk scraping!
+  
+  #Return the dataframe
+  return(df_withdrawals)
+}
+
+
+```
+
+Run the above; it should produce the same result as the previous R chunk. HOWEVER, change the year variable to `2015` and re-run the chunk. Change the facility ID to `0218-0238` and run again. Now, we have a nifty little scraping tool!
+
+
+## 2.2 Automation, Step 1: Build a function
+We have our code so we can fairly easily scrape any site (if we know its ID) for any year. Let's improve our code so we can automate the process more easily and perhaps scrape many years worth of data. To make this process run more easily, we'll first convert our code into a function that produces a dataframe of withdrawal data for a given year and facility ID.
+
+```{r create.our.function}
+#Create our scraping function
 
 ```
 
